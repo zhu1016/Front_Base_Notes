@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax学习笔记</title>
+
+    <style>
+        #box {
+            height: 200px;
+            width: 400px;
+            border: solid black 1px;
+        }
+    </style>
+</head>
+<body>
+    <button id='btn'>点击获取当前时间</button>
+    <div id="box"></div>
+    <script>
+        const btn = document.getElementById('btn');
+        const box = document.getElementById('box');
+
+        btn.onclick = ()=>{
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState === 4) {
+                    if(xhr.status == 200) {
+                        alert('请求成功');
+                    }
+                    box.innerHTML = xhr.response;
+                }
+            }
+
+            xhr.open('GET','http://poetry.apiopen.top/getTime');
+            xhr.send();
+        }
+
+        /*
+            xhr的5个状态
+            0: 初始态
+            1: open已调用，此状态下可修改请求头内容
+            2: send已调用,此状态下无法修改请求头内容
+            3: 已经有一部分数据回来
+            4: 数据全部回来
+        */
+    </script>
+
+    
+</body>
+</html>
