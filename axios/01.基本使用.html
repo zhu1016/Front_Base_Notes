@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.js"></script>
+</head>
+<body>
+    <button id="getJokeBtn">获取笑话</button>
+    <button id="postBtn">发一个post</button>
+
+    <script>
+
+            const axios2 = axios.create({
+				timeout:3000,
+				//headers:{name:'tom'},
+				baseURL:'https://api.apiopen.top'
+			})
+
+			//给axios配置默认属性
+			axios.defaults.timeout = 2000
+			//axios.defaults.headers = {token:'sdfgawsdgawg45346'}
+			//axios.defaults.baseURL = 'http://localhost:5000'
+
+
+            //请求拦截器
+			axios.interceptors.request.use((config)=>{
+				console.log('请求拦截器1执行了');
+				if(Date.now() % 2 === 0){
+					config.headers.token = 'atguigu'
+				}
+				return config
+			})
+
+			//响应拦截器
+			axios.interceptors.response.use(
+				response => {
+					console.log('响应拦截器成功的回调执行了',response);
+					if(Date.now() % 2 === 0) return response.data
+					else return '时间戳不是偶数，不能给你数据'
+				},
+				error => {
+					console.log('响应拦截器失败的回调执行了');
+					alert(error);
+					return new Promise(()=>{})
+				}
+			)
+
+
+        const getJokeBtn = document.getElementById('getJokeBtn')
+       
+        
+         getJokeBtn.onclick= () =>{
+             //完整版
+        //     axios({
+        //     url: 'https://api.apiopen.top/getSingleJoke',
+        //     method: 'get',
+        //     params: {sid:28654780}
+        //     }).then(
+        //         response =>{
+        //             console.log(response)
+        //         },
+        //         error =>{
+        //             console.log(error)
+        //         }
+        //     )
+
+            //精简版本
+            axios.get('https://api.apiopen.top/getSingleJoke',{sid:28654780}).then(
+                response =>{
+                    console.log(response.data)
+                },
+                error =>{
+                    console.log(error)
+                }
+        )
+
+        }
+
+
+
+        const postBtn = document.getElementById('postBtn')
+        postBtn.onclick = ()=>{
+            axios({
+                url: 'https://api.apiopen.top/developerRegister',
+                method: 'post',
+                params: {name:'asdfasefawe00.',passwd:'1',email:'12222@qq.com'}
+                //请求体的话用data
+            }).then(
+                (response) =>{
+                    console.log(response)
+                },
+                (error) =>{
+                    console.log(error)
+                }
+            )
+        }
+    </script>
+</body>
+</html>
