@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">获取时间</button>
+
+    <script>
+
+        /*
+                1.函数的返回值为promise对象
+                2.promise对象的结果由async函数执行的返回值决定
+                4.3. await 表达式
+                1.await右侧的表达式一般为promise对象, 但也可以是其它的值
+                2.如果表达式是promise对象, await返回的是promise成功的值  不会得到失败的值
+                3.如果表达式是其它值, 直接将此值作为await的返回值
+        */
+        // const p0 = new Promise((resolve, reject)=>{
+        //     setTimeout(()=>{
+        //         reject('失败')
+        //     },2000)
+        // })
+        const p1 = new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve('成功')
+            },2000)
+        })
+        ;async function demo(){
+            try{
+                const r1= await p1;
+                console.log(r1)
+            }catch{
+                alert('捕获异常')
+            }
+        }
+        demo()
+
+        const btn = document.getElementById('btn')
+        btn.onclick = ()=>{
+            const p = new Promise((resolve, reject) =>{
+                const xhr = new XMLHttpRequest()
+                xhr.onreadystatechange = ()=>{
+                    if(xhr.readyState === 4) {
+                        if(xhr.status === 200){
+                            resolve('成')
+                        }else{
+                            reject('败')
+                        }
+                    }
+                }
+
+                xhr.open('get','http://poetry.apiopen.top/getTime')
+                xhr.send()
+            });
+
+            (async()=>{
+                const r = await p;
+                console.log(p)
+            })
+
+
+        }
+
+
+    </script>
+</body>
+</html>

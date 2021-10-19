@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id='btn'>获取时间</button>
+
+     <!-- 
+		Promise是什么?
+				1.抽象表达:
+						(1).Promise是一门新的技术(ES6提出的)
+						(2).Promise是JS中异步编程的新方案(旧方案是谁?---纯回调)
+				2.具体表达:
+						(1).从语法上来说: Promise是一个内置构造函数
+						(2).从功能上来说: Promise的实例对象可以用来封装一个异步操作，并可以获取其成功/失败的值
+  -->
+    <script>
+        /* 
+		1.Promise不是回调，是一个内置的构造函数，是程序员自己new调用的。
+		2.new Promise的时候，要传入一个回调函数，它是同步的回调，会立即在主线程上执行，它被称为executor函数
+		3.每一个Promise实例都有3种状态：初始化(pending)、成功(fulfilled)、失败(rejected)
+		4.每一个Promise实例在刚被new出来的那一刻，状态都是初始化(pending)
+		5.executor函数会接收到2个参数，它们都是函数，分别用形参：resolve、reject接收
+					1.调用resolve函数会：
+							(1).让Promise实例状态变为成功(fulfilled)
+							(2).可以指定成功的value。
+					2.调用reject函数会：
+							(1).让Promise实例状态变为失败(rejected)
+							(2).可以指定失败的reason。
+
+                            3. 关于状态的注意点：
+					1.三个状态:
+								pending: 未确定的------初始状态
+								fulfilled: 成功的------调用resolve()后的状态
+								rejected: 失败的-------调用reject()后的状态
+					2.两种状态改变
+								pending ==> fulfilled
+								pending ==> rejected
+					3.状态只能改变一次！！
+					4.一个promise指定多个成功/失败回调函数, 都会调用吗? 会
+	*/
+
+    const btn = document.getElementById('btn')
+    btn.onclick = ()=>{
+            const p = new Promise((resolve, reject)=>{
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = ()=> {
+                if(xhr.readyState === 4) {
+                    if(xhr.status == 200){
+                        alert(xhr.status + "成功")
+                    }else{
+                        reject("请求出错了")
+                    }
+                }
+            }
+
+            xhr.open('get','http://poetry.apiopen.top/getTime123')
+            xhr.send()
+        })
+
+        p.then((result)=>{
+            alert(result)
+        },
+            (reason)=>{
+                alert(reason)
+            }
+        )
+    }
+    </script>
+</body>
+</html>
