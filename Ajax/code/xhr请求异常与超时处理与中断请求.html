@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>请求异常与超时处理</title>
+    <style>
+        #box {
+            height: 100%;
+            width: 400px;
+            border: solid black 1px;
+
+        }
+    </style>
+</head>
+<body>
+    <button id='btn'>点击获取1首诗词</button>  <hr/>
+    <button id='btn2'>取消请求</button>
+    <div id="box"></div>
+    <script>
+        const btn = document.getElementById('btn')
+        const box = document.getElementById('box')
+        let xhr;
+        btn.onclick = ()=>{
+            xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState === 4) {
+                    const{code, message, result} = xhr.response
+                    const{writer, title, content} = result[0]
+
+                    box.innerHTML = (`
+                        code:${code},message:${message}
+                        <h1>${title}</h1>
+                        <h2>${writer}</h2>
+                        <p>${content}</p>
+                    `)
+
+                }
+            }
+
+            xhr.open('GET', 'http://poetry.apiopen.top/poetryFull?count=1&page=1')
+            xhr.responseType = 'json'
+            xhr.onError = ()=>{
+                alert('发生错误')
+            }
+            xhr.timeout = 2000
+            xhr.ontimeout = ()=>{
+                alert('网速慢!')
+            }
+            xhr.send()
+            
+        }
+
+        btn2.onclick = ()=>{
+            xhr.abort()
+            alert('取消了请求')
+        }
+    </script>
+</body>
+</html>

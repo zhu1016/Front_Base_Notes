@@ -7,6 +7,38 @@
     <title>Ajax学习笔记</title>
 </head>
 <body>
-    
+    <button id="btn">点我注册</button>
+
+    <script>
+        const btn = document.getElementById('btn')
+        btn.onclick = ()=> {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState === 4) {
+                    console.log(xhr.response)
+                }
+            }
+
+            xhr.open('POST','https://api.apiopen.top/developerRegister')
+
+            //#region
+            //请求参数采用urlencoded格式
+            //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+            //xhr.send('name=Jack'+Date.now().toString().substr(-5,6)+'&passwd=123456&email=123@qq.com')
+            //#endregion
+
+            //#region
+            //请求采用json格式
+            const user = {
+                name: 'Jack' + Date.now().toString().substr(-5,6),
+                passwd: '123456',
+                email: '123@qq.com'
+            }
+            
+            xhr.send(JSON.stringify(user)); //这个后端接口不支持json格式
+            //#endregion
+
+        }
+    </script>
 </body>
 </html>
